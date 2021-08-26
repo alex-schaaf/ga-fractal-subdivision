@@ -1,4 +1,4 @@
-import p5 from 'p5'
+import p5 from "p5"
 
 export interface IPoint {
   x: number
@@ -13,7 +13,11 @@ export class LinkedPoints {
     this.head = head
   }
 
-  subdivide(n: number, modX: () => number = () => 0, modY: () => number = () => 0): void {
+  subdivide(
+    n: number,
+    modX: () => number = () => 0,
+    modY: () => number = () => 0
+  ): void {
     if (!this.head || !this.head.next) return
 
     for (let i = 0; i < n; i++) {
