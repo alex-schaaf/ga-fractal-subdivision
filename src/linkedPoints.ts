@@ -51,3 +51,44 @@ export class LinkedPoints {
     }
   }
 }
+
+/** Create n points on a circle with given center x, y and and radius r
+ *
+ * @param x - X coordinate of the center of the circle
+ * @param y - Y coordinate of the center of the circle
+ * @param r - Radius of the circle
+ * @param nStep - Number of steps to complete the circle
+ * @param seamless - If true the last point will be at the same location
+ * as the first
+ *
+ * @returns starting point of a linked list of points making up the
+ * circle
+ */
+export const createPointsOnCircle = (
+  x: number,
+  y: number,
+  r: number,
+  nStep: number,
+  seamless: boolean = true
+): IPoint => {
+  let start = { x: x + r, y: y, next: null } as IPoint
+  let current = start
+  const thetaStep = (2 * Math.PI) / nStep
+
+  for (let theta = thetaStep; theta < 2 * Math.PI; theta += thetaStep) {
+    const Y = x + Math.sin(theta) * r - r
+    const X = y + Math.cos(theta) * r + r
+    let next = { x: X, y: Y, next: null } as IPoint
+    current.next = next
+    current = next
+  }
+
+  if (seamless) {
+    /**
+     * to make sure the circle ends in the same place as it started
+     * add a point identical to the starting point to the end
+     */
+    current.next = { x: x + r, y: y, next: null } as IPoint
+  }
+  return start
+}
