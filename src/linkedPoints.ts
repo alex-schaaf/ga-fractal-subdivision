@@ -13,7 +13,7 @@ export class LinkedPoints {
     this.head = head
   }
 
-  subdivide(n: number): void {
+  subdivide(n: number, modX: () => number = () => 0, modY: () => number = () => 0): void {
     if (!this.head || !this.head.next) return
 
     for (let i = 0; i < n; i++) {
@@ -21,8 +21,8 @@ export class LinkedPoints {
 
       while (point.next) {
         // TODO add optional arg of type func that returns a (random) value to x, y
-        const newX = 0.5 * (point.x + point.next.x)
-        const newY = 0.5 * (point.y + point.next.y)
+        const newX = 0.5 * (point.x + point.next.x) + modX()
+        const newY = 0.5 * (point.y + point.next.y) + modY()
         let midPoint = { x: newX, y: newY, next: point.next } as IPoint
 
         let nextPoint = point.next

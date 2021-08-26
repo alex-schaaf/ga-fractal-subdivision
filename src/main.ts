@@ -15,26 +15,22 @@ const sketch = function (p: p5) {
     const canvas = p.createCanvas(canvasX, canvasY)
     canvas.parent('p5-canvas')
     p.stroke(255)
-    p.frameRate(10)
+    p.frameRate(3)
   }
 
 
-  let nIter = 0
   p.draw = () => {
+    p.clear()
     points.head.next = end
-    
-    points.subdivide(3)
+
+    const modY = () => p.random() * 20
+  
+    points.subdivide(3, () => 0, modY)
     p.strokeWeight(1)
     points.drawLines(p)
     p.strokeWeight(5)
     points.drawPoints(p)
-    
-    nIter++
 
-    if (nIter > 20) {
-      p. clear()
-      nIter = 0
-    }
   }
 }
 
