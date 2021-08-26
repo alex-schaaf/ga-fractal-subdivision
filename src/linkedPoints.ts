@@ -20,7 +20,6 @@ export class LinkedPoints {
       let point = this.head
 
       while (point.next) {
-        // TODO add optional arg of type func that returns a (random) value to x, y
         const newX = 0.5 * (point.x + point.next.x) + modX()
         const newY = 0.5 * (point.y + point.next.y) + modY()
         let midPoint = { x: newX, y: newY, next: point.next } as IPoint
