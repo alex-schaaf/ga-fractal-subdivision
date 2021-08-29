@@ -1,5 +1,6 @@
 import p5 from "p5"
 
+/** Point of a forward linked list */
 export interface IPoint {
   x: number
   y: number
@@ -58,6 +59,7 @@ export class LinkedPoints {
  * @param y - Y coordinate of the center of the circle
  * @param r - Radius of the circle
  * @param nStep - Number of steps to complete the circle
+ *
  * @param seamless - If true the last point will be at the same location
  * as the first
  *
@@ -69,15 +71,17 @@ export const createPointsOnCircle = (
   y: number,
   r: number,
   nStep: number,
-  seamless: boolean = true
+  seamless: boolean = true,
+  modX: () => number = () => 0,
+  modY: () => number = () => 0
 ): IPoint => {
-  let start = { x: x + r, y: y, next: null } as IPoint
+  let start = { x: x + r + modX(), y: y + modY(), next: null } as IPoint
   let current = start
   const thetaStep = (2 * Math.PI) / nStep
 
   for (let theta = thetaStep; theta < 2 * Math.PI; theta += thetaStep) {
-    const Y = x + Math.sin(theta) * r - r
-    const X = y + Math.cos(theta) * r + r
+    const X = y + Math.cos(theta) * r + r + modX()
+    const Y = x + Math.sin(theta) * r - r + modY()
     let next = { x: X, y: Y, next: null } as IPoint
     current.next = next
     current = next
@@ -88,7 +92,7 @@ export const createPointsOnCircle = (
      * to make sure the circle ends in the same place as it started
      * add a point identical to the starting point to the end
      */
-    current.next = { x: x + r, y: y, next: null } as IPoint
+    current.next = { x: start.x, y: start.y, next: null } as IPoint
   }
   return start
 }

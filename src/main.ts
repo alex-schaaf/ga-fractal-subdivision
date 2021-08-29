@@ -17,28 +17,33 @@ const sketch = function (p: p5) {
     const canvas = p.createCanvas(canvasX, canvasY)
     canvas.parent("p5-canvas")
     p.frameRate(3)
-    p.strokeWeight(5)
-    p.stroke(255, 0, 0)
-    p.point(canvasX / 2, canvasY / 2)
     p.stroke(255)
-    // points.subdivide(2)
-    points.drawPoints(p)
   }
 
-  // p.draw = () => {
-  //   p.clear()
-  //   points.head.next = end
+  const modX = () => (p.random() - 0.5) * 20
+  const modY = () => (p.random() - 0.5) * 20
 
-  //   const modY = () => p.random() * 20
-  //   points.subdivide(3, () => 0, modY)
-  //   p.stroke(200, 0, 50)
-  //   p.strokeWeight(1)
-  //   points.drawLines(p)
-  //   p.stroke(255)
-  //   p.strokeWeight(5)
-  //   points.drawPoints(p)
-  // }
-  p.draw = () => {}
+  p.draw = () => {
+    p.clear()
+    p.strokeWeight(4)
+    p.stroke(255, 0, 0)
+    p.point(canvasX / 2, canvasY / 2)
+    let start = createPointsOnCircle(
+      canvasX / 2,
+      canvasY / 2,
+      100,
+      12,
+      true,
+      modX,
+      modY
+    )
+    let points = new LinkedPoints(start)
+    p.stroke(255)
+    p.strokeWeight(8)
+    points.drawPoints(p)
+    p.strokeWeight(1)
+    points.drawLines(p)
+  }
 }
 
 new p5(sketch)
