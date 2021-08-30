@@ -1,7 +1,6 @@
 import p5 from "p5"
 import "./styles.scss"
 import {
-  IPoint,
   createPointsOnCircle,
   randomizePoints,
   shiftPoints,

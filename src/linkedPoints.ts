@@ -1,13 +1,13 @@
 import p5 from "p5"
 
 /** Point of a forward linked list */
-export interface IPoint {
+export interface Point {
   x: number
   y: number
-  next: IPoint | null
+  next: Point | null
 }
 
-export const drawLines = (start: IPoint, p: p5): void => {
+export const drawLines = (start: Point, p: p5): void => {
   let current = start
   while (current && current.next) {
     p.line(current.x, current.y, current.next.x, current.next.y)
@@ -15,7 +15,7 @@ export const drawLines = (start: IPoint, p: p5): void => {
   }
 }
 
-export const drawPoints = (start: IPoint, p: p5): void => {
+export const drawPoints = (start: Point, p: p5): void => {
   let point = start
   while (point) {
     p.point(point.x, point.y)
@@ -23,14 +23,19 @@ export const drawPoints = (start: IPoint, p: p5): void => {
   }
 }
 
-export const subdividePoints = (start: IPoint, n: number): void => {
+/** Subdivides given linked list of points at
+ *
+ * @param start - Starting point of the linked list of points
+ * @param n - Number of subdivisions
+ */
+export const subdividePoints = (start: Point, n: number): void => {
   for (let i = 0; i < n; i++) {
     let current = start
 
     while (current.next) {
       const newX = 0.5 * (current.x + current.next.x)
       const newY = 0.5 * (current.y + current.next.y)
-      let midPoint = { x: newX, y: newY, next: current.next } as IPoint
+      let midPoint = { x: newX, y: newY, next: current.next } as Point
 
       let next = current.next
       current.next = midPoint
@@ -58,15 +63,15 @@ export const createPointsOnCircle = (
   r: number,
   nStep: number,
   seamless: boolean = true
-): IPoint => {
-  let start = { x: x + r, y: y, next: null } as IPoint
+): Point => {
+  let start = { x: x + r, y: y, next: null } as Point
   let current = start
   const thetaStep = (2 * Math.PI) / nStep
 
   for (let theta = thetaStep; theta < 2 * Math.PI; theta += thetaStep) {
     const X = y + Math.cos(theta) * r + r
     const Y = x + Math.sin(theta) * r - r
-    let next = { x: X, y: Y, next: null } as IPoint
+    let next = { x: X, y: Y, next: null } as Point
     current.next = next
     current = next
   }
@@ -76,13 +81,20 @@ export const createPointsOnCircle = (
      * to make sure the circle ends in the same place as it started
      * add a point identical to the starting point to the end
      */
-    current.next = { x: start.x, y: start.y, next: null } as IPoint
+    current.next = { x: start.x, y: start.y, next: null } as Point
   }
   return start
 }
 
+/** Perturb points of linked list of points by random value with a scaling factor
+ *
+ * @param start - Starting point of the linked list of points
+ * @param factor - Perturbation factor to scale the default perturbation of [-0.5, 0.5]
+ * @param seamless - Makes sure the last point of the linked list has the same coordinates
+ * of the first point after perturbation (e.g. for circles)
+ */
 export const randomizePoints = (
-  start: IPoint,
+  start: Point,
   factor: number = 1,
   seamless: boolean = true
 ): void => {
@@ -100,8 +112,15 @@ export const randomizePoints = (
   }
 }
 
+/** Move all points of linked list of points by given delta x, y
+ *
+ * @param start - Starting point of the linked list of points
+ * @param dx - delta x
+ * @param dy - delta y
+ * @param seamless - Makes sure to shift first and last point of linked list by same amount
+ */
 export const shiftPoints = (
-  start: IPoint,
+  start: Point,
   dx: number,
   dy: number,
   seamless: boolean = true
@@ -119,7 +138,12 @@ export const shiftPoints = (
   }
 }
 
-export const drawPolygon = (start: IPoint, p: p5): void => {
+/** Draw a polygon of a linked list of points
+ *
+ * @param start - Starting point of the linked list of points
+ * @param p - p5js instance
+ */
+export const drawPolygon = (start: Point, p: p5): void => {
   p.beginShape()
   let current = start
   while (current.next) {
