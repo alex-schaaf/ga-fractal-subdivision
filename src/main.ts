@@ -2,7 +2,6 @@ import p5 from "p5"
 import "./styles.scss"
 import {
   IPoint,
-  LinkedPoints,
   createPointsOnCircle,
   randomizePoints,
   shiftPoints,
@@ -14,7 +13,6 @@ const canvasY = 600
 
 const sketch = function (p: p5) {
   let start = createPointsOnCircle(canvasX / 2, canvasY / 2, 100, 12)
-  let points = new LinkedPoints(start)
 
   p.setup = () => {
     const canvas = p.createCanvas(canvasX, canvasY)
@@ -33,12 +31,9 @@ const sketch = function (p: p5) {
     p.stroke(255, 155)
     p.strokeWeight(1)
     p.fill(0, 255)
-    // points.drawPoints(p)
-    // p.strokeWeight(1)
-    // points.drawLines(p)
     drawPolygon(start, p)
     randomizePoints(start, 5)
-    shiftPoints(start, 1, 1)
+    shiftPoints(start, Math.random() - 0.5, 0.25)
     nIter += 1
   }
 }

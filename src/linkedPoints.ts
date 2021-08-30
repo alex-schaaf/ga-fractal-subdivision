@@ -7,48 +7,34 @@ export interface IPoint {
   next: IPoint | null
 }
 
-export class LinkedPoints {
-  head: IPoint | null
-
-  constructor(head: IPoint | null = null) {
-    this.head = head
+export const drawLines = (start: IPoint, p: p5): void => {
+  let current = start
+  while (current && current.next) {
+    p.line(current.x, current.y, current.next.x, current.next.y)
+    current = current.next
   }
+}
 
-  subdivide(
-    n: number,
-    modX: () => number = () => 0,
-    modY: () => number = () => 0
-  ): void {
-    if (!this.head || !this.head.next) return
-
-    for (let i = 0; i < n; i++) {
-      let point = this.head
-
-      while (point.next) {
-        const newX = 0.5 * (point.x + point.next.x) + modX()
-        const newY = 0.5 * (point.y + point.next.y) + modY()
-        let midPoint = { x: newX, y: newY, next: point.next } as IPoint
-
-        let nextPoint = point.next
-        point.next = midPoint
-        point = nextPoint
-      }
-    }
+export const drawPoints = (start: IPoint, p: p5): void => {
+  let point = start
+  while (point) {
+    p.point(point.x, point.y)
+    point = point.next
   }
+}
 
-  drawLines(p: p5): void {
-    let point = this.head
-    while (point && point.next) {
-      p.line(point.x, point.y, point.next.x, point.next.y)
-      point = point.next
-    }
-  }
+export const subdividePoints = (start: IPoint, n: number): void => {
+  for (let i = 0; i < n; i++) {
+    let current = start
 
-  drawPoints(p: p5): void {
-    let point = this.head
-    while (point) {
-      p.point(point.x, point.y)
-      point = point.next
+    while (current.next) {
+      const newX = 0.5 * (current.x + current.next.x)
+      const newY = 0.5 * (current.y + current.next.y)
+      let midPoint = { x: newX, y: newY, next: current.next } as IPoint
+
+      let next = current.next
+      current.next = midPoint
+      current = next
     }
   }
 }
@@ -99,7 +85,7 @@ export const randomizePoints = (
   start: IPoint,
   factor: number = 1,
   seamless: boolean = true
-) => {
+): void => {
   let current = start
   while (current.next) {
     current.x += (Math.random() - 0.5) * factor
@@ -119,7 +105,7 @@ export const shiftPoints = (
   dx: number,
   dy: number,
   seamless: boolean = true
-) => {
+): void => {
   let current = start
   while (current.next) {
     current.x += dx
@@ -133,7 +119,7 @@ export const shiftPoints = (
   }
 }
 
-export const drawPolygon = (start: IPoint, p: p5) => {
+export const drawPolygon = (start: IPoint, p: p5): void => {
   p.beginShape()
   let current = start
   while (current.next) {
