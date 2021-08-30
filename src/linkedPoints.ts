@@ -1,4 +1,5 @@
 import p5 from "p5"
+import { randomNormal } from "./stats"
 
 /** Point of a forward linked list */
 export interface Point {
@@ -100,8 +101,8 @@ export const randomizePoints = (
 ): void => {
   let current = start
   while (current.next) {
-    current.x += (Math.random() - 0.5) * factor
-    current.y += (Math.random() - 0.5) * factor
+    current.x += randomNormal() * factor
+    current.y += randomNormal() * factor
 
     current = current.next
   }
