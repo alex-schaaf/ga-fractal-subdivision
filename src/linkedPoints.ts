@@ -71,17 +71,15 @@ export const createPointsOnCircle = (
   y: number,
   r: number,
   nStep: number,
-  seamless: boolean = true,
-  modX: () => number = () => 0,
-  modY: () => number = () => 0
+  seamless: boolean = true
 ): IPoint => {
-  let start = { x: x + r + modX(), y: y + modY(), next: null } as IPoint
+  let start = { x: x + r, y: y, next: null } as IPoint
   let current = start
   const thetaStep = (2 * Math.PI) / nStep
 
   for (let theta = thetaStep; theta < 2 * Math.PI; theta += thetaStep) {
-    const X = y + Math.cos(theta) * r + r + modX()
-    const Y = x + Math.sin(theta) * r - r + modY()
+    const X = y + Math.cos(theta) * r + r
+    const Y = x + Math.sin(theta) * r - r
     let next = { x: X, y: Y, next: null } as IPoint
     current.next = next
     current = next
@@ -95,4 +93,42 @@ export const createPointsOnCircle = (
     current.next = { x: start.x, y: start.y, next: null } as IPoint
   }
   return start
+}
+
+export const randomizePoints = (
+  start: IPoint,
+  factor: number = 1,
+  seamless: boolean = true
+) => {
+  let current = start
+  while (current.next) {
+    current.x += (Math.random() - 0.5) * factor
+    current.y += (Math.random() - 0.5) * factor
+
+    current = current.next
+  }
+
+  if (seamless) {
+    current.x = start.x
+    current.y = start.y
+  }
+}
+
+export const shiftPoints = (
+  start: IPoint,
+  dx: number,
+  dy: number,
+  seamless: boolean = true
+) => {
+  let current = start
+  while (current.next) {
+    current.x += dx
+    current.y += dy
+    current = current.next
+  }
+
+  if (seamless) {
+    current.x = start.x
+    current.y = start.y
+  }
 }
