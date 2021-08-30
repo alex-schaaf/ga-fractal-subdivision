@@ -132,3 +132,13 @@ export const shiftPoints = (
     current.y = start.y
   }
 }
+
+export const drawPolygon = (start: IPoint, p: p5) => {
+  p.beginShape()
+  let current = start
+  while (current.next) {
+    p.vertex(current.x, current.y)
+    current = current.next
+  }
+  p.endShape(p.CLOSE)
+}

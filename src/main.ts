@@ -6,6 +6,7 @@ import {
   createPointsOnCircle,
   randomizePoints,
   shiftPoints,
+  drawPolygon,
 } from "./linkedPoints"
 
 const canvasX = 800
@@ -24,16 +25,18 @@ const sketch = function (p: p5) {
   let nIter = 0
 
   p.draw = () => {
-    if (nIter >= 90) {
+    if (nIter >= 180) {
       p.noLoop()
     }
     // p.clear()
 
-    p.stroke(255, 125)
-    // p.strokeWeight(8)
-    // points.drawPoints(p)
+    p.stroke(255, 155)
     p.strokeWeight(1)
-    points.drawLines(p)
+    p.fill(0, 255)
+    // points.drawPoints(p)
+    // p.strokeWeight(1)
+    // points.drawLines(p)
+    drawPolygon(start, p)
     randomizePoints(start, 5)
     shiftPoints(start, 1, 1)
     nIter += 1
